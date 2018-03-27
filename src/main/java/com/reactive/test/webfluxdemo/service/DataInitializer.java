@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -28,16 +29,16 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         log.info("start data init...");
         this.posts
                 .deleteAll()
                 .thenMany(
                         Flux
-                            .just("Post one", "Post two")
-                            .flatMap(
-                                    title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
-                            )
+                                .just("Post one", "Post two")
+                                .flatMap(
+                                        title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
+                                )
                 )
                 .log()
                 .subscribe(
@@ -54,7 +55,7 @@ public class DataInitializer implements CommandLineRunner {
                                 .flatMap(
                                         username -> {
                                             List<String> roles = "user".equals(username)
-                                                    ? Arrays.asList("ROLE_USER")
+                                                    ? Collections.singletonList("ROLE_USER")
                                                     : Arrays.asList("ROLE_USER", "ROLE_ADMIN");
 
                                             User user = User.builder()

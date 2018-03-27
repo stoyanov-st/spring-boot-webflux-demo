@@ -27,9 +27,9 @@ public class User {
     @Email
     private String email;
 
-    @Builder.Default
+    @Builder.Default()
     private boolean active = true;
 
-    @Builder.Default
+    @Builder.Default()
     private List<String> roles = new ArrayList<>();
 }

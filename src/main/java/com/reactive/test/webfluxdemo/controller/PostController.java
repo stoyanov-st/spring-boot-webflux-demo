@@ -1,5 +1,6 @@
 package com.reactive.test.webfluxdemo.controller;
 
+import com.reactive.test.webfluxdemo.exception.PostNotFoundException;
 import com.reactive.test.webfluxdemo.model.Post;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,13 @@ public class PostController {
 
     @GetMapping("/{id}")
     public Mono<Post> get(@PathVariable("id") String id) {
-        return this.posts.findById(id);
+        return this.posts
+                .findById(id)
+                .switchIfEmpty(
+                        Mono.error(
+                                new PostNotFoundException(id)
+                        )
+                );
     }
 
     @PutMapping("/{id}")
