@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {Subscription} from "rxjs/Subscription";
+import {Router} from "@angular/router";
+import {AuthService} from "../../core/auth.service";
 
 @Component({
   selector: 'app-signin',
@@ -7,9 +10,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SigninComponent implements OnInit {
 
-  constructor() { }
+  private username = '';
+  private password = '';
+  errorMessage = '';
+
+  sub: Subscription = null;
+
+
+  constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
   }
 
+  submit() {
+    this.auth.attempAuth({ username: this.username, password: this.password})
+      .subscribe(
+        (data) => this.router.navigate(['']),
+        (err) => {
+          this.errorMessage = 'login failed';
+          return;
+        }
+      )
+  }
 }

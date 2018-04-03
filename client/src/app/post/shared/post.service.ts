@@ -31,7 +31,7 @@ export class PostService {
     return this.http.post(`${apiUrl}`, data);
   }
 
-  udpatePost(id: string, data: Post) {
+  updatePost(id: string, data: Post) {
     console.log('updating post: ' + data);
     return this.http.put(`${apiUrl}/${id}`, data);
   }
@@ -39,5 +39,13 @@ export class PostService {
   deletePost(id: string) {
     console.log('deleting post: ' + id);
     return this.http.delete(`${apiUrl}/${id}`);
+  }
+
+  saveComment(id: string, data: Comment) {
+    return  this.http.post(`${apiUrl}/${id}/comments`, data);
+  }
+
+  getCommentsOfPost(id: string) {
+    return this.http.get(`${apiUrl}/${id}/comments` );
   }
 }
